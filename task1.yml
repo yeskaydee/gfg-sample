@@ -1,0 +1,24 @@
+---
+- name: Update cache and Install Nginx
+  hosts: hosts
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+    - name: Copy default html file for site
+      copy:
+        src: default_site.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
+    - name: Ensure Nginx service is restarted
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+
